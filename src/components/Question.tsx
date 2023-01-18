@@ -1,3 +1,4 @@
+import { find } from 'lodash';
 import {
   Box,
   Center,
@@ -8,72 +9,83 @@ import {
   Pressable,
   Text,
 } from 'native-base';
+import { setAnswer } from '../slices/questionsSlice';
+import { useAppDispatch, useAppSelector } from '../store';
+import { QuestionItem } from '../types/question.type';
 
-export const Question = () => (
-  <>
-    <Center mt="4">
-      <Container w="full" mb="2">
-        <Heading>Cuál es uno de los fundadores de apple?</Heading>
-      </Container>
-    </Center>
-    <Center mb="12">
-      <Container w="full">
-        {[
-          {
-            answer_id: '1.a',
-            answer: 'Steve Jobs',
-            selected: false,
-          },
-          {
-            answer_id: '1.b',
-            answer: 'Bill gates',
-            selected: false,
-          },
-          {
-            answer_id: '1.c',
-            answer: 'Michael jordan',
-            selected: true,
-          },
-        ].map(({ answer_id, answer, selected }, idx) => (
-          <Pressable
-            onPress={() => console.log({ answer_id })}
-            key={idx}
-            rounded={20}
-            bgColor={selected ? 'teamcore.100' : 'gray.200'}
-            borderWidth="2"
-            borderColor={selected ? 'teamcore.100' : 'gray.400'}
-            w="full"
-            mt="3"
-            display={'flex'}
-            flexDirection="row"
-            justifyContent={'space-between'}
-          >
-            <Box py="2" px="4">
-              <HStack space={2} justifyContent="center">
-                <Text
-                  color={selected ? 'white' : 'teamcore.100'}
-                  fontWeight={'bold'}
-                  fontSize="md"
-                >
-                  {answer_id}
-                </Text>
-                <Text
-                  color={selected ? 'white' : 'teamcore.100'}
-                  fontWeight={'medium'}
-                  fontSize="md"
-                >
-                  {answer}
-                </Text>
-              </HStack>
-            </Box>
-            <Box py="2" px="4">
-              {selected ? (
-                <CheckCircleIcon size={6} color="emerald.400" />
-              ) : null}
-            </Box>
-          </Pressable>
-        ))}
-      </Container>
-    </Center>
-  </>
-);
+export const Question = ({ question_id, question, answers }: QuestionItem) => {
+  const answersData = useAppSelector((state) => state.questions.answered);
+  const dispatch = useAppDispatch();
+
+  return (
+    <>
+      <Center mt="4">
+        <Container w="full" mb="2">
+          <Heading>{question}</Heading>
+        </Container>
+      </Center>
+      <Center mb="12">
+        <Container w="full">
+          {answers.map(({ answer_id, answer }, idx) => {
+            const selected = find(
+              answersData,
+              (answerData) => answerData.answer_id === answer_id
+            );
+
+            return (
+              <Pressable
+                onPress={() => dispatch(setAnswer({ question_id, answer_id }))}
+                key={idx}
+                w="full"
+                mt="3"
+              >
+                {({ isPressed }) => (
+                  <Box
+                    rounded={20}
+                    bgColor={selected ? 'teamcore.100' : 'muted.50'}
+                    borderWidth="2"
+                    borderColor={selected ? 'teamcore.100' : 'gray.400'}
+                    display={'flex'}
+                    flexDirection="row"
+                    justifyContent={'space-between'}
+                    style={{
+                      transform: [
+                        {
+                          scale: isPressed ? 0.98 : 1,
+                        },
+                      ],
+                    }}
+                  >
+                    <Box py="2" px="4">
+                      <HStack space={2} justifyContent="center">
+                        <Text
+                          color={selected ? 'white' : 'teamcore.100'}
+                          fontWeight={'bold'}
+                          fontSize="md"
+                        >
+                          {answer_id}
+                        </Text>
+                        <Text
+                          color={selected ? 'white' : 'teamcore.100'}
+                          fontWeight={'medium'}
+                          fontSize="md"
+                        >
+                          {answer}
+                        </Text>
+                      </HStack>
+                    </Box>
+                    <Box py="2" px="4">
+                      {selected ? (
+                        <CheckCircleIcon size={6} color="emerald.400" />
+                      ) : null}
+                    </Box>
+                  </Box>
+                )}
+              </Pressable>
+            );
+          })}
+        </Container>
+      </Center>
+    </>
+  );
+};

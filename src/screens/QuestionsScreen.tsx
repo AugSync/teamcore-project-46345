@@ -1,20 +1,31 @@
 import { StatusBar } from 'expo-status-bar';
 import { Flex, ScrollView } from 'native-base';
-import React, { useRef } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useRef } from 'react';
 import { Question } from '../components/Question';
 import { QuestionSkeleton } from '../components/QuestionSkeleton';
 import { Welcome } from '../components/Welcome';
 import QuestionDataService from '../api/services/question.service';
 import { useQuery } from 'react-query';
-import { Dimensions } from 'react-native';
+import { Dimensions, SafeAreaView } from 'react-native';
 import Constants from 'expo-constants';
+import { useAppDispatch, useAppSelector } from '../store';
+import { setQuestions } from '../slices/questionsSlice';
 
 export const QuestionsScreen = () => {
+  const questionData = useAppSelector((state) => state.questions.data);
+  const dispatch = useAppDispatch();
+
   const { data, error, isLoading } = useQuery(
     '/questions',
     QuestionDataService.getAll
   );
+
+  // Parse statementf
+  useEffect(() => {
+    if (data?.data) {
+      dispatch(setQuestions(data.data));
+    }
+  }, [data]);
 
   const ScrollRef = useRef();
 
@@ -26,7 +37,7 @@ export const QuestionsScreen = () => {
 
         {isLoading || error ? <QuestionSkeleton /> : null}
 
-        {data ? (
+        {questionData ? (
           <Flex
             bgColor="white"
             direction="column"
@@ -37,8 +48,8 @@ export const QuestionsScreen = () => {
             pb="32"
           >
             {/* XD the first data of axios and sexond of teamcore. So many data keys */}
-            {data.data.data.map((_, idx) => (
-              <Question key={idx} />
+            {questionData.data.map((questionData, idx) => (
+              <Question key={idx} {...questionData} />
             ))}
           </Flex>
         ) : null}

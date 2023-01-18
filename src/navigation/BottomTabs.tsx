@@ -30,7 +30,6 @@ export const BottomTabs = () => {
           activeTintColor: 'white',
           inactiveTintColor: 'black',
           activeBackgroundColor: 'black',
-          tabStyle: { paddingBottom: 20 },
         }}
         appearance={{
           shadow: true,
