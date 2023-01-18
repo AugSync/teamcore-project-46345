@@ -1,5 +1,10 @@
 # teamcore-project-46345
 
+## Dowload APP
+
+🤖 Android app:
+https://expo.dev/artifacts/eas/bDbYrqRbCiPJCy9QHYAeii.apk
+
 Expo app using `SDK 44`.
 
 ## Stacks
