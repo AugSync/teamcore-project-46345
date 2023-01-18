@@ -5,10 +5,10 @@ import {
   DotSize,
   TabElementDisplayOptions,
 } from 'react-native-animated-nav-tab-bar';
-import { HomeScreen } from '../screens/HomeScreen';
 import { AntDesign } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { AboutScreen } from '../screens/AboutScreen';
+import { QuestionsScreen } from '../screens/QuestionsScreen';
 
 const Tabs = AnimatedTabBarNavigator();
 
@@ -34,7 +34,7 @@ export const BottomTabs = () => {
         }}
         appearance={{
           shadow: true,
-          floating: false,
+          floating: true,
           whenActiveShow: TabElementDisplayOptions.BOTH,
           dotSize: DotSize.SMALL,
           horizontalPadding: 50,
@@ -42,11 +42,15 @@ export const BottomTabs = () => {
         }}
       >
         <Tabs.Screen
-          name="Home"
-          component={HomeScreen}
+          name="Questions"
+          component={QuestionsScreen}
           options={{
             tabBarIcon: ({ focused, color }: any) => (
-              <TabBarIcon focused={focused} tintColor={color} name="home" />
+              <TabBarIcon
+                focused={focused}
+                tintColor={color}
+                name="questioncircle"
+              />
             ),
           }}
         />
