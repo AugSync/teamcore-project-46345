@@ -1,14 +1,14 @@
-import IQuestionData from '../../types/question.type';
+import IQuestionData, { AnswersBody } from '../../types/question.type';
 import http from '../http-common';
 
 class QuestionDataService {
-  getAll() {
+  getQuestions() {
     return http.get<IQuestionData>('/questions');
   }
 
-  /* create(data: ITutorialData) {
-    return http.post<ITutorialData>('/tutorials', data);
-  } */
+  postAnswers(data: AnswersBody) {
+    return http.post('/answer', data);
+  }
 }
 
 export default new QuestionDataService();

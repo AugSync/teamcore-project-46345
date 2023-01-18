@@ -19,3 +19,8 @@ export interface QuestionAnswered {
   question_id: string;
   answer_id: string;
 }
+
+export interface AnswersBody {
+  date: string;
+  data: QuestionAnswered[];
+}

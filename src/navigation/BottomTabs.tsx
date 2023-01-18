@@ -41,7 +41,7 @@ export const BottomTabs = () => {
         }}
       >
         <Tabs.Screen
-          name="Questions"
+          name="Preguntas"
           component={QuestionsScreen}
           options={{
             tabBarIcon: ({ focused, color }: any) => (
@@ -54,7 +54,7 @@ export const BottomTabs = () => {
           }}
         />
         <Tabs.Screen
-          name="About"
+          name="Info"
           component={AboutScreen}
           options={{
             tabBarIcon: ({ focused, color }: any) => (

@@ -29,10 +29,13 @@ export const questionsSlice = createSlice({
 
       state.answered = data;
     },
+    resetAnswers: (state) => {
+      state.answered = [];
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setQuestions, setAnswer } = questionsSlice.actions;
+export const { setQuestions, setAnswer, resetAnswers } = questionsSlice.actions;
 
 export default questionsSlice.reducer;
