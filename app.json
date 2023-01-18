@@ -31,6 +31,12 @@
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f59e3085-cd32-4344-ab0c-337f9fdc7dd2"
+      }
+    },
+    "owner": "augsync"
   }
 }
