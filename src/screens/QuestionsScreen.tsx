@@ -13,9 +13,15 @@ import { resetAnswers, setQuestions } from '../slices/questionsSlice';
 import { FontAwesome } from '@expo/vector-icons';
 import { AnswersBody } from '../types/question.type';
 import axios from 'axios';
+import { Congrats } from '../components/Congrats';
 
 export const QuestionsScreen = () => {
   const [isSending, setIsSending] = useState(false);
+  const [isAnswered, setIsAnswered] = useState(false);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ScrollRef = useRef<any>();
+
   const questionData = useAppSelector((state) => state.questions.data);
   const answeredData = useAppSelector((state) => state.questions.answered);
   const dispatch = useAppDispatch();
@@ -40,6 +46,13 @@ export const QuestionsScreen = () => {
             onPress: () => {
               dispatch(resetAnswers());
               queryClient.invalidateQueries('todos');
+              setIsAnswered(true);
+
+              ScrollRef.current?.scrollTo({
+                y: 0,
+                animated: true,
+              });
+              setIsSending(false);
             },
             style: 'destructive',
           },
@@ -48,6 +61,7 @@ export const QuestionsScreen = () => {
             onPress: () => {
               dispatch(resetAnswers());
               queryClient.invalidateQueries('todos');
+              setIsSending(false);
             },
           },
         ]
@@ -64,8 +78,6 @@ export const QuestionsScreen = () => {
           ]
         );
       }
-    } finally {
-      setIsSending(false);
     }
   };
 
@@ -89,13 +101,19 @@ export const QuestionsScreen = () => {
       );
   }, [error]);
 
-  const ScrollRef = useRef();
-
   return (
     <SafeAreaView>
       <StatusBar style="auto" />
       <ScrollView ref={ScrollRef}>
-        <Welcome ScrollRef={ScrollRef} />
+        {isAnswered ? (
+          <Congrats
+            ScrollRef={ScrollRef}
+            setIsAnswered={setIsAnswered}
+            setIsSending={setIsSending}
+          />
+        ) : (
+          <Welcome ScrollRef={ScrollRef} />
+        )}
 
         {isLoading || error ? <QuestionSkeleton /> : null}
 
@@ -109,7 +127,6 @@ export const QuestionsScreen = () => {
             }
             pb="32"
           >
-            {/* XD the first data of axios and sexond of teamcore. So many data keys */}
             {questionData.data.map((questionData, idx) => (
               <Question key={idx} {...questionData} />
             ))}
